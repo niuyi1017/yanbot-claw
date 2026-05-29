@@ -8,6 +8,7 @@ import {
   Search,
   GraduationCap,
   Wand2,
+  ListChecks,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -15,6 +16,7 @@ const NAV = [
   { href: "/", label: "工作台", icon: LayoutDashboard },
   { href: "/agent", label: "Agent 对话", icon: MessageSquare },
   { href: "/tools/search", label: "AI 检索", icon: Search },
+  { href: "/tools/recommend", label: "志愿推荐", icon: ListChecks },
   { href: "/tools/school-report", label: "择校报告", icon: GraduationCap },
   { href: "/tools/content", label: "内容生成", icon: Wand2 },
 ];
