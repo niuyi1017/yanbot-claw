@@ -10,11 +10,11 @@ services:
     volumes:
       - ./logs:/app/logs
     healthcheck:
-      test: ["CMD", "wget", "-qO-", "http://localhost:3000/api/health"]
-      interval: 30s
+      test: [ "CMD", "node", "-e", "fetch('http://localhost:3000/api/health').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))" ]
+      interval: 10s
       timeout: 10s
-      retries: 3
-      start_period: 30s
+      retries: 6
+      start_period: 20s
     logging:
       driver: "json-file"
       options:
