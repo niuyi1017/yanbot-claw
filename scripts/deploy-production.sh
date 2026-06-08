@@ -149,7 +149,7 @@ echo "Testing API health endpoint..."
 MAX_RETRIES=5
 API_HEALTHY=false
 for i in $(seq 1 $MAX_RETRIES); do
-  if curl -f -s http://localhost:3000/api/health > /dev/null; then
+  if curl -f -s http://localhost:3002/api/health > /dev/null; then
     echo -e "${GREEN}✓ API is responding${NC}"
     API_HEALTHY=true
     break
