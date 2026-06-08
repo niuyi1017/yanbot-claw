@@ -108,41 +108,38 @@ fi
 
 echo "Waiting for service to be ready..."
 HEALTHY=false
-for i in {1..12}; do
-  if docker ps --filter name=yanbot-claw-staging --filter health=healthy | grep -q yanbot-claw-staging; then
+MAX_HEALTH_WAIT_SECONDS=${MAX_HEALTH_WAIT_SECONDS:-180}
+HEALTH_POLL_INTERVAL_SECONDS=5
+MAX_HEALTH_POLLS=$((MAX_HEALTH_WAIT_SECONDS / HEALTH_POLL_INTERVAL_SECONDS))
+if [ "$MAX_HEALTH_POLLS" -lt 1 ]; then
+  MAX_HEALTH_POLLS=1
+fi
+
+for i in $(seq 1 "$MAX_HEALTH_POLLS"); do
+  if ! docker ps --filter name=yanbot-claw-staging | grep -q yanbot-claw-staging; then
+    rollback "Container not running after startup"
+  fi
+
+  HEALTH_STATUS=$(docker inspect yanbot-claw-staging --format='{{if .State.Health}}{{.State.Health.Status}}{{else}}none{{end}}' 2>/dev/null || echo "unknown")
+
+  if [ "$HEALTH_STATUS" = "healthy" ]; then
     echo -e "${GREEN}✓ Container is healthy${NC}"
     HEALTHY=true
     break
   fi
-  echo "Waiting... ($i/12)"
-  sleep 5
-done
-
-if ! docker ps --filter name=yanbot-claw-staging | grep -q yanbot-claw-staging; then
-  rollback "Container not running after startup"
-fi
-
-if [ "$HEALTHY" = false ]; then
-  HEALTH_STATUS=$(docker inspect yanbot-claw-staging --format='{{.State.Health.Status}}' 2>/dev/null || echo "unknown")
-  echo -e "${YELLOW}⚠️  Container health status: $HEALTH_STATUS${NC}"
 
   if [ "$HEALTH_STATUS" = "unhealthy" ]; then
     docker logs --tail 50 yanbot-claw-staging
     rollback "Container health check failed (unhealthy)"
-  elif [ "$HEALTH_STATUS" = "starting" ]; then
-    for i in {1..6}; do
-      sleep 5
-      if docker ps --filter name=yanbot-claw-staging --filter health=healthy | grep -q yanbot-claw-staging; then
-        echo -e "${GREEN}✓ Container is now healthy${NC}"
-        HEALTHY=true
-        break
-      fi
-    done
-    if [ "$HEALTHY" = false ]; then
-      docker logs --tail 50 yanbot-claw-staging
-      rollback "Container health check timeout (still starting after 90s)"
-    fi
   fi
+
+  echo "Waiting health... ($i/$MAX_HEALTH_POLLS, status=$HEALTH_STATUS)"
+  sleep "$HEALTH_POLL_INTERVAL_SECONDS"
+done
+
+if [ "$HEALTHY" = false ]; then
+  docker logs --tail 50 yanbot-claw-staging
+  rollback "Container health check timeout (still not healthy after ${MAX_HEALTH_WAIT_SECONDS}s, status=${HEALTH_STATUS:-unknown})"
 fi
 
 echo "Testing API health endpoint..."
