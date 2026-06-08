@@ -32,6 +32,15 @@ export interface ContentInput {
   format: "xhs" | "video-script";
 }
 
+export interface RecommendInput {
+  score: number;
+  subjectGroup: "physics" | "history";
+  cityPrefs?: string[];
+  schoolTags?: ("985" | "211" | "public")[];
+  majorKeywords?: string[];
+  gender?: "M" | "F";
+}
+
 export interface ConversationMeta {
   id: string;
   title: string;

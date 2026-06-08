@@ -7,7 +7,10 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "import:hebei": "tsx scripts/import-hebei-2025.ts",
+    "import:schools": "tsx scripts/import-schools.ts",
+    "import:all": "tsx scripts/import-schools.ts && tsx scripts/import-hebei-2025.ts"
   },
   "dependencies": {
     "next": "15.1.6",
@@ -46,6 +49,12 @@
     "postcss": "^8.5.1",
     "autoprefixer": "^10.4.20",
     "eslint": "^9.17.0",
-    "eslint-config-next": "15.1.6"
-  }
+    "eslint-config-next": "15.1.6",
+    "drizzle-orm": "^0.36.4",
+    "better-sqlite3": "^11.7.0",
+    "@types/better-sqlite3": "^7.6.12",
+    "xlsx": "^0.18.5",
+    "tsx": "^4.19.2"
+  },
+  "packageManager": "pnpm@11.5.2+sha512.71c631e382066efc25625d5cf029075de07b61b37f6e27350fbd84b1bda5864c8c1967adc280776b45c30a715c0359a3be08fef42d5bb09e2b99029979692916"
 }

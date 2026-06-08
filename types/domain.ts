@@ -64,3 +64,38 @@ export interface ContentDraft {
   tags: string[];
   cover?: string;
 }
+
+export interface Recommendation {
+  schoolName: string;
+  schoolCity: string | null;
+  schoolTags: string[];
+  majorName: string;
+  minScore: number;
+  scoreDiff: number;
+  admitProbability: "high" | "medium" | "low";
+  reason: string;
+}
+
+export interface RecommendGroup {
+  tier: "reach" | "match" | "safety";
+  label: "冲" | "稳" | "保";
+  items: Recommendation[];
+}
+
+export interface RecommendResult {
+  candidate: {
+    score: number;
+    subjectGroup: "physics" | "history";
+    cityPrefs?: string[];
+    schoolTags?: string[];
+    majorKeywords?: string[];
+    gender?: "M" | "F";
+  };
+  groups: RecommendGroup[];
+  meta: {
+    dataYear: number;
+    totalCandidates: number;
+    relaxed?: string[];
+    warning?: string;
+  };
+}
