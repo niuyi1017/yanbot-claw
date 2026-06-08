@@ -57,12 +57,18 @@ if [ -z "${REGISTRY:-}" ] || [ -z "${IMAGE_NAME:-}" ] || [ -z "${DOCKER_USERNAME
   exit 1
 fi
 
-mkdir -p /www/yanbot-claw-production/{logs,env}
+mkdir -p /www/yanbot-claw-production/{logs,env,data}
 cd /www/yanbot-claw-production
 
 if [ ! -f "env/.env.production" ]; then
   echo -e "${RED}❌ Error: env/.env.production not found!${NC}"
   echo -e "${YELLOW}Please create /www/yanbot-claw-production/env/.env.production on the server${NC}"
+  exit 1
+fi
+
+if [ ! -f "data/yanbot.db" ]; then
+  echo -e "${RED}❌ Error: data/yanbot.db not found!${NC}"
+  echo -e "${YELLOW}Please upload /www/yanbot-claw-production/data/yanbot.db before deployment${NC}"
   exit 1
 fi
 
