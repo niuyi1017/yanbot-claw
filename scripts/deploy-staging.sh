@@ -57,12 +57,18 @@ if [ -z "${REGISTRY:-}" ] || [ -z "${IMAGE_NAME:-}" ] || [ -z "${DOCKER_USERNAME
   exit 1
 fi
 
-mkdir -p /www/yanbot-claw-staging/{logs,env}
+mkdir -p /www/yanbot-claw-staging/{logs,env,data}
 cd /www/yanbot-claw-staging
 
 if [ ! -f "env/.env.staging" ]; then
   echo -e "${RED}❌ Error: env/.env.staging not found!${NC}"
   echo -e "${YELLOW}Please create /www/yanbot-claw-staging/env/.env.staging on the server${NC}"
+  exit 1
+fi
+
+if [ ! -f "data/yanbot.db" ]; then
+  echo -e "${RED}❌ Error: data/yanbot.db not found!${NC}"
+  echo -e "${YELLOW}Please upload /www/yanbot-claw-staging/data/yanbot.db before deployment${NC}"
   exit 1
 fi
 
