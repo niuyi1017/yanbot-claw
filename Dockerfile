@@ -6,12 +6,14 @@ FROM node:22-alpine AS base
 
 # ========== 阶段 1: 安装依赖 ==========
 FROM base AS deps
-RUN apk add --no-cache libc6-compat
+# libc6-compat for glibc compat; python3/make/g++ for native module compilation fallback
+RUN apk add --no-cache libc6-compat python3 make g++
 WORKDIR /app
 
 COPY package.json pnpm-lock.yaml ./
 RUN corepack enable && corepack prepare pnpm@latest --activate
-RUN pnpm install --frozen-lockfile --ignore-scripts
+# Do NOT use --ignore-scripts: better-sqlite3 needs its postinstall to download/build the native binary
+RUN pnpm install --frozen-lockfile
 
 # ========== 阶段 2: 构建应用 ==========
 FROM base AS builder
@@ -43,6 +45,8 @@ RUN chown nextjs:nodejs .next
 # standalone 模式输出
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
+# Next.js nft does not auto-trace .node native binaries; copy explicitly
+COPY --from=builder --chown=nextjs:nodejs /app/node_modules/better-sqlite3/build/Release/ ./node_modules/better-sqlite3/build/Release/
 
 USER nextjs
 
