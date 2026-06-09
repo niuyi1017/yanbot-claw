@@ -47,8 +47,6 @@ RUN chown nextjs:nodejs .next
 # standalone 模式输出
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
-# Next.js nft does not auto-trace .node native binaries; copy explicitly
-COPY --from=builder --chown=nextjs:nodejs /app/node_modules/better-sqlite3/build/Release/ ./node_modules/better-sqlite3/build/Release/
 
 USER nextjs
 
