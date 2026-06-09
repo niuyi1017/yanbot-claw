@@ -10,12 +10,9 @@ FROM base AS deps
 RUN apk add --no-cache libc6-compat python3 make g++
 WORKDIR /app
 
-COPY package.json pnpm-lock.yaml ./
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
 RUN corepack enable && corepack prepare pnpm@11.5.2 --activate
-# Step 1: deterministic frozen install without running native build scripts
-RUN pnpm install --frozen-lockfile --ignore-scripts
-# Step 2: explicitly compile better-sqlite3 native binary (prebuild-install or node-gyp)
-RUN pnpm rebuild better-sqlite3
+RUN pnpm install --frozen-lockfile
 
 # ========== 阶段 2: 构建应用 ==========
 FROM base AS builder
