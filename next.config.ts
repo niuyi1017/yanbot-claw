@@ -4,16 +4,8 @@ const nextConfig: NextConfig = {
   reactStrictMode: true,
   poweredByHeader: false,
   output: "standalone",
-  // Explicitly include better-sqlite3 native binaries in standalone output.
-  // Depending on the install environment, better-sqlite3 may use either a
-  // prebuilds artifact or a node-gyp build/Release artifact.
-  outputFileTracingIncludes: {
-    "/api/**": [
-      "./node_modules/better-sqlite3/prebuilds/**/*.node",
-      "./node_modules/better-sqlite3/build/Release/*.node",
-      "./node_modules/better-sqlite3/lib/binding/**/*.node",
-    ],
-  },
+  // better-sqlite3 is copied explicitly in the Dockerfile runner stage
+  // because Next.js nft cannot follow pnpm virtual-store symlinks.
 };
 
 export default nextConfig;
