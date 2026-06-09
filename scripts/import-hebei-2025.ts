@@ -227,6 +227,11 @@ function main() {
   console.log(
     `done. parsed=${totalRead} written=${totalWritten} linked=${totalLinked} skipped=${totalSkipped} db_rows=${count.n} db=${DB_PATH}`,
   );
+  // Checkpoint WAL and revert to DELETE journal mode so the resulting .db
+  // file is safe to mount read-only in Docker (WAL mode requires -shm which
+  // cannot be created on a :ro volume).
+  db.pragma("wal_checkpoint(TRUNCATE)");
+  db.pragma("journal_mode = DELETE");
   db.close();
 }
 
