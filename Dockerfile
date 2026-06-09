@@ -45,6 +45,19 @@ RUN chown nextjs:nodejs .next
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 
+# Next.js nft cannot follow pnpm virtual-store symlinks, so better-sqlite3
+# and its runtime deps are absent from the standalone node_modules trace.
+# Copy them explicitly from the deps stage pnpm virtual store.
+COPY --from=deps --chown=nextjs:nodejs \
+  /app/node_modules/.pnpm/better-sqlite3@11.10.0/node_modules/better-sqlite3 \
+  ./node_modules/better-sqlite3
+COPY --from=deps --chown=nextjs:nodejs \
+  /app/node_modules/.pnpm/bindings@1.5.0/node_modules/bindings \
+  ./node_modules/bindings
+COPY --from=deps --chown=nextjs:nodejs \
+  /app/node_modules/.pnpm/file-uri-to-path@1.0.0/node_modules/file-uri-to-path \
+  ./node_modules/file-uri-to-path
+
 USER nextjs
 
 EXPOSE 3000
