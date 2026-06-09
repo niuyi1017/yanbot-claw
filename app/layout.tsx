@@ -4,8 +4,8 @@ import { ThemeProvider } from "@/components/layout/theme-provider";
 import { Toaster } from "@/components/ui/sonner";
 
 export const metadata: Metadata = {
-  title: "yanbot-claw",
-  description: "考研 AI 工作台",
+  title: "研bot AI",
+  description: "超级教师工作台",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
