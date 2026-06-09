@@ -7,9 +7,11 @@ import { Input } from "@/components/ui/input";
 
 export function MessageInput({
   disabled,
+  placeholder = "输入消息，回车发送",
   onSubmit,
 }: {
   disabled?: boolean;
+  placeholder?: string;
   onSubmit: (text: string) => void | Promise<void>;
 }) {
   const [text, setText] = useState("");
@@ -27,7 +29,7 @@ export function MessageInput({
       <Input
         value={text}
         onChange={(e) => setText(e.target.value)}
-        placeholder="输入消息，回车发送"
+        placeholder={placeholder}
         disabled={disabled}
         autoComplete="off"
       />

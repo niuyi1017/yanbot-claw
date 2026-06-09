@@ -47,14 +47,26 @@ export interface TagListData {
   total: number;
 }
 
-// claw-specific (placeholder shapes for the 3 tools)
-export interface SchoolReport {
-  schoolName: string;
-  major: string;
-  summary: string;
-  fitScore: number;
-  sections: Array<{ title: string; body: string }>;
-  dataSource: "real" | "mock";
+export interface SchoolRec {
+  tier: "冲" | "稳" | "保";
+  name: string;
+  location: string;
+  badge: string;
+  minScore: number;
+  scoreDiff: number;
+  reason: string;
+}
+
+export interface VibeReport {
+  candidate: {
+    score: number;
+    subjectGroup: "physics" | "history";
+    major: string;
+    region: string;
+  };
+  overview: string;
+  recs: SchoolRec[];
+  tips: string[];
 }
 
 export interface ContentDraft {
