@@ -3,7 +3,7 @@ import { ok, fail } from "@/lib/server/response";
 import { generateVibeReport } from "@/lib/services/school-report";
 
 const schema = z.object({
-  score: z.number(),
+  score: z.number().int().min(200).max(750),
   subjectGroup: z.enum(["physics", "history"]),
   majorKeywords: z.array(z.string()).optional(),
   regionPrefs: z.array(z.string()).optional(),
@@ -12,5 +12,10 @@ const schema = z.object({
 export async function POST(req: Request) {
   const parsed = schema.safeParse(await req.json().catch(() => ({})));
   if (!parsed.success) return fail("invalid payload");
-  return ok(generateVibeReport(parsed.data));
+  try {
+    return ok(generateVibeReport(parsed.data));
+  } catch (err) {
+    console.error("[school-report/vibe]", err);
+    return fail("服务暂时不可用，请稍后重试", 500);
+  }
 }

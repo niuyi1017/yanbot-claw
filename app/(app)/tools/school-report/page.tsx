@@ -1,17 +1,14 @@
 import { PageHeader } from "@/components/common/page-header";
-import { EmptyState } from "@/components/common/empty-state";
+import { VibeChat } from "@/components/school-report/vibe-chat";
 
 export default function SchoolReportPage() {
   return (
-    <>
+    <div className="flex h-[calc(100vh-3.5rem-3rem)] flex-col">
       <PageHeader
         title="择校报告"
-        description="基于考生情况与历年上岸数据，生成结构化择校建议"
+        description="告诉我你的考研情况，AI 自主规划并输出个性化择校报告"
       />
-      <EmptyState
-        title="敬请期待"
-        description="下一期接入历年录取数据 + LLM 生成 Markdown 报告"
-      />
-    </>
+      <VibeChat />
+    </div>
   );
 }
