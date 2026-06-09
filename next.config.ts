@@ -11,6 +11,7 @@ const nextConfig: NextConfig = {
     "/api/**": [
       "./node_modules/better-sqlite3/prebuilds/**/*.node",
       "./node_modules/better-sqlite3/build/Release/*.node",
+      "./node_modules/better-sqlite3/lib/binding/**/*.node",
     ],
   },
 };
