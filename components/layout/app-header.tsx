@@ -26,8 +26,8 @@ export function AppHeader({ username }: { username: string }) {
   return (
     <header className="flex h-14 items-center justify-between border-b px-6">
       <div className="flex items-center gap-2">
-        <span className="text-base font-semibold">yanbot-claw</span>
-        <span className="text-xs text-muted-foreground">考研 AI 工作台</span>
+        <span className="text-base font-semibold">研bot AI</span>
+        <span className="text-xs text-muted-foreground">超级教师工作台</span>
       </div>
       <div className="flex items-center gap-2">
         <ThemeToggle />
