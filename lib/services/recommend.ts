@@ -83,6 +83,8 @@ function queryRows(input: RecommendInput, relaxed: string[]): DbRow[] {
     "a.subject_group = ?",
     "a.min_score IS NOT NULL",
     "a.min_score BETWEEN ? AND ?",
+    "a.enroll_type NOT LIKE '%中外合作%'",
+    "a.major_name NOT LIKE '%中外合作%'",
   ];
   const params: (string | number)[] = [YEAR, subjectGroup, score - 15, score + 25];
 
